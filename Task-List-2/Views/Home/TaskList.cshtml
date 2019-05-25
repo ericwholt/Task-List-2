@@ -1,16 +1,33 @@
 ﻿@using Task_List_2.Models
 @{
     Tasks tasks = (Tasks)Session["tasks"];
+    User user = (User)Session["User"];
+    bool taskFound = false;
+    for (int i = 0; i < tasks.ListOfTasks.Count; i++)
+    {
+        Task task = tasks.ListOfTasks[i];
+
+        if (task.UserId == user.Id)
+        {
+            taskFound = true;
+        }
+    }
 }
 <h2>TaskList</h2>
-@if (tasks.ListOfTasks.Count == 0)
-{
-    <div><h4>No tasks to display</h4></div>
-}
-else
-{
-    <div class="table-responsive">
+<div class="table-responsive">
+    @if (tasks.ListOfTasks.Count == 0 || !taskFound)
+    {
         <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">No tasks to display</th>
+                </tr>
+            </thead>
+        </table>
+    }
+    else
+    {
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th scope="col">Id</th>
@@ -22,16 +39,22 @@ else
             <tbody>
                 @for (int i = 0; i < tasks.ListOfTasks.Count; i++)
                 {
-
                     Task task = tasks.ListOfTasks[i];
-                    <tr>
-                        <th scope="row">@task.Id</th>
-                        <td>@task.Description</td>
-                        <td>@task.DueDate</td>
-                        <td>@task.Completed</td>
-                    </tr>
+
+                    if (task.UserId == user.Id)
+                    {
+                        taskFound = true;
+                        <tr>
+                            <th scope="row">@task.Id</th>
+                            <td>@task.Description</td>
+                            <td>@task.DueDate</td>
+                            <td>@task.Completed</td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>
-    </div>
-}
+    }
+    @Html.ActionLink("Add Task", "AddTask", "Home", null, new { @class = "btn btn-primary" })
+</div>
+

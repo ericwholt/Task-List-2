@@ -14,6 +14,6 @@ namespace Task_List_2.Models
         [Required]
         public string Description { get; set; }
         public DateTime DueDate { get; set; }
-        public bool Completed { get; set; }
+        public bool Completed { get; set; } = false;
     }
 }

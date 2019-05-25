@@ -33,10 +33,15 @@ namespace Task_List_2.Controllers
         public ActionResult Registration(User user)
         {
             Users users;
+            if (string.IsNullOrWhiteSpace(user.Email) || string.IsNullOrWhiteSpace(user.Password))
+            {
+                ViewBag.Message = "You must enter a email and/or password";
+                return View();
+            }
             if (Session["Users"] == null)
             {
                 users = new Users();
-                users.Add(user);                
+                users.Add(user);
                 Session["Users"] = users;
             }
             else
@@ -66,27 +71,27 @@ namespace Task_List_2.Controllers
             if (Session["User"] == null)
             {
                 Users listOfUsers;
-                    if (Session["Users"] == null)
+                if (Session["Users"] == null)
+                {
+                    listOfUsers = new Users();
+                    foreach (User u in listOfUsers.ListOfUsers)
                     {
-                        listOfUsers = new Users();
-                        foreach (User u in listOfUsers.ListOfUsers)
-                        {
-                            if (user.Email == u.Email && user.Password == u.Password)
-                                Session["User"] = user;
-                            return RedirectToAction("TaskList");
-                        }
+                        if (user.Email == u.Email && user.Password == u.Password)
+                            Session["User"] = user;
+                        return RedirectToAction("TaskList");
                     }
-                    else
+                }
+                else
+                {
+                    listOfUsers = (Users)Session["Users"];
+                    foreach (User u in listOfUsers.ListOfUsers)
                     {
-                        listOfUsers = (Users)Session["Users"];
-                        foreach (User u in listOfUsers.ListOfUsers)
-                        {
-                            if (user.Email == u.Email && user.Password == u.Password)
-                                Session["User"] = user;
-                            return RedirectToAction("TaskList");
-                        }
+                        if (user.Email == u.Email && user.Password == u.Password)
+                            Session["User"] = user;
+                        return RedirectToAction("TaskList");
+                    }
 
-                    }
+                }
             }
             return View();
         }
@@ -97,12 +102,25 @@ namespace Task_List_2.Controllers
             if (Session["Tasks"] == null)
             {
                 tasks = new Tasks();
-                tasks.Add(new Task() { Description = "Test1", DueDate = DateTime.Now, Completed = false });
-                tasks.Add(new Task() { Description = "Test2", DueDate = DateTime.Now, Completed = false });
-                tasks.Add(new Task() { Description = "Test3", DueDate = DateTime.Now, Completed = false });
+                tasks.Add(new Task() { UserId = 1, Description = "Test1", DueDate = DateTime.Now, Completed = false });
+                tasks.Add(new Task() { UserId = 1, Description = "Test2", DueDate = DateTime.Now, Completed = false });
+                tasks.Add(new Task() { UserId = 1, Description = "Test3", DueDate = DateTime.Now, Completed = false });
                 Session["Tasks"] = tasks;
             }
             return View();
+        }
+
+        public ActionResult AddTask()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddTask(Task task)
+        {
+            Tasks tasks = (Tasks)Session["Tasks"];
+            tasks.Add(task);
+            return RedirectToAction("TaskList");
         }
 
         public ActionResult Logout()
