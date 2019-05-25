@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using Task_List_2.Models;
 
 namespace Task_List_2.Controllers
@@ -92,13 +93,15 @@ namespace Task_List_2.Controllers
 
         public ActionResult TaskList()
         {
-            Users users = (Users)Session["Users"];
-            for (int i = 0; i < users.ListOfUsers.Count; i++)
+            Tasks tasks;
+            if (Session["Tasks"] == null)
             {
-                User user = users.ListOfUsers[i];
-                ViewBag.Message += $"<p>User: {user.Id}</p>";
+                tasks = new Tasks();
+                tasks.Add(new Task() { Description = "Test1", DueDate = DateTime.Now, Completed = false });
+                tasks.Add(new Task() { Description = "Test2", DueDate = DateTime.Now, Completed = false });
+                tasks.Add(new Task() { Description = "Test3", DueDate = DateTime.Now, Completed = false });
+                Session["Tasks"] = tasks;
             }
-
             return View();
         }
 

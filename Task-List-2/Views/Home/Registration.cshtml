@@ -1,7 +1,28 @@
 ﻿<h2>Register</h2>
-<p>User ID: @ViewBag.Message</p>
-<form action="~/Home/Registration" method="post">
-    Email<input type="email" name="Email" /><br />
-    Password<input type="password" name="Password" /><br />
-    <input type="submit" />
+<form action="~/Home/Registration" method="post"
+    oninput='passwordConfirm.setCustomValidity(passwordConfirm.value != Password.value ? "Passwords do not match." : "")'>
+    <div class="form-group">
+        <label for="Email">Email</label><br />
+        <input type="email" name="Email" class="form-control" aria-describedby="emailHelp" id="Email" placeholder="Enter Email Address..." required />
+        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    </div>
+    <fieldset class="form-group">
+        <label for="Password">Password</label><br />
+        <input type="password" name="Password" class="form-control" id="Password"
+               placeholder="Enter Password"
+               pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}+$"
+               aria-describedby="passwordHelp"
+               title="Must contain at least one number and one uppercase and lowercase letter,
+                  and at least 8 or more characters"
+               required />
+        <small id="passwordHelp" class="form-text text-muted">
+            Must contain at least one number and one uppercase and lowercase letter,
+            and at least 8 or more characters
+        </small>
+        <input type="password" name="passwordConfirm" class="form-control" placeholder="Confirm Password" aria-describedby="passwordConfirm" />
+        <small id="passwordConfirm" class="form-text text-muted">
+            Both password fields must match.
+        </small>
+    </fieldset>
+    <input class="btn btn-primary" type="submit" value="Submit">
 </form>

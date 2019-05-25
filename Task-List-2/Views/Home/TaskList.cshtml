@@ -1,5 +1,37 @@
-﻿@{
-    ViewBag.Title = "TaskList";
+﻿@using Task_List_2.Models
+@{
+    Tasks tasks = (Tasks)Session["tasks"];
 }
-@ViewBag.Message
 <h2>TaskList</h2>
+@if (tasks.ListOfTasks.Count == 0)
+{
+    <div><h4>No tasks to display</h4></div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Due Date</th>
+                    <th scope="col">Completed</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < tasks.ListOfTasks.Count; i++)
+                {
+
+                    Task task = tasks.ListOfTasks[i];
+                    <tr>
+                        <th scope="row">@task.Id</th>
+                        <td>@task.Description</td>
+                        <td>@task.DueDate</td>
+                        <td>@task.Completed</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
