@@ -31,12 +31,18 @@ namespace Task_List_2.Controllers
         [HttpPost]
         public ActionResult Registration(User user)
         {
-            Users listOfUsers;
+            Users users;
             if (Session["Users"] == null)
             {
-                listOfUsers = new Users();
-                listOfUsers.ListOfUsers.Add(user);
-                Session["Users"] = listOfUsers;
+                users = new Users();
+                users.Add(user);                
+                Session["Users"] = users;
+            }
+            else
+            {
+                users = (Users)Session["Users"];
+                users.Add(user);
+                Session["Users"] = users;
             }
             return View();
         }
@@ -86,6 +92,13 @@ namespace Task_List_2.Controllers
 
         public ActionResult TaskList()
         {
+            Users users = (Users)Session["Users"];
+            for (int i = 0; i < users.ListOfUsers.Count; i++)
+            {
+                User user = users.ListOfUsers[i];
+                ViewBag.Message += $"<p>User: {user.Id}</p>";
+            }
+
             return View();
         }
 

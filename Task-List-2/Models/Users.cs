@@ -8,7 +8,7 @@ namespace Task_List_2.Models
     public class Users
     {
         public int UserId { get; private set; } = 0;
-        public List<User> ListOfUsers { get; set; }
+        public List<User> ListOfUsers { get; private set; }
 
         public Users()
         {
@@ -17,7 +17,7 @@ namespace Task_List_2.Models
 
         public void Add(User user)
         {
-            UserId = UserId++;
+            UserId += 1;
             user.Id = UserId;
             ListOfUsers.Add(user);
         }
