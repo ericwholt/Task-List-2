@@ -14,8 +14,7 @@
         Session["LoginFailure"]
     </div>
 }
-<form action="~/Home/Registration" method="post"
-      oninput='passwordConfirm.setCustomValidity(passwordConfirm.value != Password.value ? "Passwords do not match." : "")'>
+<form action="~/Home/Registration" method="post">
     <div class="form-group">
         <label for="Email">Email</label><br />
         <input type="email" name="Email" class="form-control" aria-describedby="emailHelp" id="Email" placeholder="Enter Email Address..." required />
@@ -39,5 +38,9 @@
             Both password fields must match.
         </small>
     </fieldset>
-    <input class="btn btn-primary" type="submit" value="Submit">
+    <input class="btn btn-primary" type="submit" value="Sign Up">
 </form>
+<script>
+    document.getElementById("Email").focus();
+
+</script>   
