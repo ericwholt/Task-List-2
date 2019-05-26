@@ -1,4 +1,8 @@
-﻿<h2>Add Task</h2>
+﻿@using Task_List_2.Models
+@{
+    User user = (User)Session["User"];
+}
+<h2>Add Task</h2>
 <form class="form-inline" action="~/Home/AddTask" method="post">
     <div class="form-group">
         <input type="text" name="Description" class="form-control mr-sm-4" id="Description" placeholder="Enter Task Description..." required />
@@ -7,9 +11,10 @@
         <input type="date" name="DueDate" class="form-control mr-sm-2" id="DueDate" min="1000-01-01" max="3000-12-31" required />
     </div>
     <div class="form-check mr-sm-2">
-        <input type="text" name="Completed" class="form-check-input" id="Completed" value="true"/>
+        <input type="text" name="Completed" class="form-check-input" id="Completed" value="false" />
         <input type="hidden" name="Completed" class="form-check-input" value="false" />
         <label class="form-check-label" for="Completed">Completed</label>
     </div>
+    <input type="hidden" name="UserId" class="form-check-input" value="@user.Id" />
     <input class="btn btn-primary" type="submit" value="Submit">
 </form>

@@ -1,17 +1,22 @@
 ﻿@using Task_List_2.Models
+@model Task
 @{
     Tasks tasks = (Tasks)Session["tasks"];
     User user = (User)Session["User"];
     bool taskFound = false;
-    for (int i = 0; i < tasks.ListOfTasks.Count; i++)
+    if (user != null)
     {
-        Task task = tasks.ListOfTasks[i];
-
-        if (task.UserId == user.Id)
+        for (int i = 0; i < tasks.ListOfTasks.Count; i++)
         {
-            taskFound = true;
+            Task task = tasks.ListOfTasks[i];
+
+            if (task.UserId == user.Id)
+            {
+                taskFound = true;
+            }
         }
     }
+
 }
 <h2>TaskList</h2>
 <div class="table-responsive">
@@ -27,29 +32,79 @@
     }
     else
     {
-        <table class="table table-striped">
+        <table class="table table-striped text-center">
             <thead>
                 <tr>
                     <th scope="col">Id</th>
                     <th scope="col">Description</th>
                     <th scope="col">Due Date</th>
                     <th scope="col">Completed</th>
+                    <th scope="col">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @for (int i = 0; i < tasks.ListOfTasks.Count; i++)
                 {
                     Task task = tasks.ListOfTasks[i];
-
-                    if (task.UserId == user.Id)
+                    if (user != null)
                     {
-                        taskFound = true;
-                        <tr>
-                            <th scope="row">@task.Id</th>
-                            <td>@task.Description</td>
-                            <td>@task.DueDate</td>
-                            <td>@task.Completed</td>
-                        </tr>
+                        if (task.UserId == user.Id)
+                        {
+                            taskFound = true;
+                            <tr>
+                                <th scope="row">@task.Id</th>
+                                <td>@task.Description</td>
+                                <td>@task.DueDate</td>
+                                <td>
+                                    @if (@task.Completed)
+                                    {
+                                        <form action="~/Home/CompleteTask" method="post">
+                                            <input type="hidden" name="Id" value="@task.Id" />
+                                            <input type="hidden" name="Description" value="@task.Description" />
+                                            <input type="hidden" name="DueDate" value="@task.DueDate" />
+                                            <button type="submit" class="btn btn-sm btn-link">
+                                                <i class="far fa-check-square"></i>
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form action="~/Home/CompleteTask" method="post">
+
+                                            <input type="hidden" name="Id" value="@task.Id" />
+
+                                            <input type="hidden" name="Description" value="@task.Description" />
+
+                                            <input type="hidden" name="DueDate" value="@task.DueDate" />
+
+                                            <button type="submit" class="btn btn-sm btn-link">
+                                                <i class="far fa-square"></i>
+                                            </button>
+                                        </form>
+                                    }
+                                    @* @task.Completed @Html.CheckBoxFor(model => model.Completed)*@
+                                </td>
+                                <td>
+                                    <form action="~/Home/DeleteTask" method="post">
+                                        <input type="hidden" name="Id" value="@task.Id" />
+                                        <input type="hidden" name="Description" value="@task.Description" />
+                                        <input type="hidden" name="DueDate" value="@task.DueDate" />
+                                        <button type="submit" class="btn btn-sm btn-link">
+                                            <i class="far fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                    @*<form action="~/Home/DeleteTask" method="post">
+                                            <input type="hidden" name="Id" value="@task.Id" />
+                                            <input type="hidden" name="Description" value="@task.Description" />
+                                            <input type="hidden" name="DueDate" value="@task.DueDate" />
+                                            <input type="hidden" name="Complete" value="@task.Completed" />
+                                            <button type="submit" class="btn btn-sm btn-link">
+                                                <i class="far fa-trash-alt"></i>
+                                            </button>
+                                        </form>*@
+                                </td>
+                            </tr>
+                        }
                     }
                 }
             </tbody>

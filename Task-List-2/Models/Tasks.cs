@@ -32,5 +32,16 @@ namespace Task_List_2.Models
                 }
             }
         }
+
+        internal void CompleteToggler(int taskId)
+        {
+            for (int i = 0; i < ListOfTasks.Count; i++)
+            {
+                if (ListOfTasks[i].Id == taskId)
+                {
+                    ListOfTasks[i].Completed = !ListOfTasks[i].Completed;
+                }
+            }
+        }
     }
 }

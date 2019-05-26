@@ -1,7 +1,21 @@
 ﻿<h3 style="color:red">@ViewBag.Message</h3>
 <h2>Register</h2>
+@if (@Session["RegSuccess"] != null)
+{
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        @Session["RegSuccess"]
+    </div>
+}
+@if (Session["LoginFailure"] != null)
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        Session["LoginFailure"]
+    </div>
+}
 <form action="~/Home/Registration" method="post"
-    oninput='passwordConfirm.setCustomValidity(passwordConfirm.value != Password.value ? "Passwords do not match." : "")'>
+      oninput='passwordConfirm.setCustomValidity(passwordConfirm.value != Password.value ? "Passwords do not match." : "")'>
     <div class="form-group">
         <label for="Email">Email</label><br />
         <input type="email" name="Email" class="form-control" aria-describedby="emailHelp" id="Email" placeholder="Enter Email Address..." required />

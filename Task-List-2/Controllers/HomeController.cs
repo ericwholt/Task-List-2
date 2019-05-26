@@ -35,22 +35,27 @@ namespace Task_List_2.Controllers
             Users users;
             if (string.IsNullOrWhiteSpace(user.Email) || string.IsNullOrWhiteSpace(user.Password))
             {
-                ViewBag.Message = "You must enter a email and/or password";
+                Session["Failure"] = "You must enter a email and/or password";
                 return View();
             }
             if (Session["Users"] == null)
             {
+                Session["Failure"] = null;
+                Session["RegSuccess"] = "You have successfully registered. Please login to begin!";
                 users = new Users();
                 users.Add(user);
                 Session["Users"] = users;
+                return RedirectToAction("Login");
             }
             else
             {
+                Session["Failure"] = null;
+                Session["RegSuccess"] = "You have successfully registered. Please login to begin!";
                 users = (Users)Session["Users"];
                 users.Add(user);
                 Session["Users"] = users;
+                return RedirectToAction("Login");
             }
-            return View();
         }
 
         public ActionResult Login()
@@ -68,29 +73,32 @@ namespace Task_List_2.Controllers
         [HttpPost]
         public ActionResult Login(User user)
         {
+            Session["RegSuccess"] = null;
             if (Session["User"] == null)
             {
                 Users listOfUsers;
                 if (Session["Users"] == null)
                 {
-                    listOfUsers = new Users();
-                    foreach (User u in listOfUsers.ListOfUsers)
-                    {
-                        if (user.Email == u.Email && user.Password == u.Password)
-                            Session["User"] = user;
-                        return RedirectToAction("TaskList");
-                    }
+
+                            Session["Failure"] = "You need to register first";
+                            return RedirectToAction("Registration");
                 }
                 else
                 {
+                    
                     listOfUsers = (Users)Session["Users"];
                     foreach (User u in listOfUsers.ListOfUsers)
                     {
                         if (user.Email == u.Email && user.Password == u.Password)
-                            Session["User"] = user;
-                        return RedirectToAction("TaskList");
+                        {
+                            Session["Failure"] = null;
+                            Session["User"] = u;
+                            return RedirectToAction("TaskList");
+                        }
+                        
                     }
-
+                    Session["Failure"] = "Incorrect email or password";
+                    return View();
                 }
             }
             return View();
@@ -102,9 +110,6 @@ namespace Task_List_2.Controllers
             if (Session["Tasks"] == null)
             {
                 tasks = new Tasks();
-                tasks.Add(new Task() { UserId = 1, Description = "Test1", DueDate = DateTime.Now, Completed = false });
-                tasks.Add(new Task() { UserId = 1, Description = "Test2", DueDate = DateTime.Now, Completed = false });
-                tasks.Add(new Task() { UserId = 1, Description = "Test3", DueDate = DateTime.Now, Completed = false });
                 Session["Tasks"] = tasks;
             }
             return View();
@@ -120,6 +125,22 @@ namespace Task_List_2.Controllers
         {
             Tasks tasks = (Tasks)Session["Tasks"];
             tasks.Add(task);
+            return RedirectToAction("TaskList");
+        }
+
+        [HttpPost]
+        public ActionResult CompleteTask(Task task)
+        {
+            Tasks tasks = (Tasks)Session["Tasks"];
+            tasks.CompleteToggler(task.Id);
+            return RedirectToAction("TaskList");
+        }
+
+        [HttpPost]
+        public ActionResult DeleteTask(Task task)
+        {
+            Tasks tasks = (Tasks)Session["Tasks"];
+            tasks.Delete(task.Id);
             return RedirectToAction("TaskList");
         }
 
