@@ -106,6 +106,13 @@ namespace Task_List_2.Controllers
 
         public ActionResult TaskList()
         {
+            if (Session["User"] == null)
+            {
+                Session["RegSuccess"] = null;
+                Session["Failure"] = "You have been logged out due to being idle";
+                return RedirectToAction("Login");
+            }
+            Session["Failure"] = null;
             Tasks tasks;
             if (Session["Tasks"] == null)
             {
@@ -117,28 +124,87 @@ namespace Task_List_2.Controllers
 
         public ActionResult AddTask()
         {
+            if (Session["User"] == null)
+            {
+                Session["RegSuccess"] = null;
+                Session["Failure"] = "You have been logged out due to being idle";
+                return RedirectToAction("Login");
+            }
+            Session["Failure"] = null;
             return View();
         }
 
         [HttpPost]
         public ActionResult AddTask(Task task)
         {
+            if (Session["User"] == null)
+            {
+                Session["RegSuccess"] = null;
+                Session["Failure"] = "You have been logged out due to being idle";
+                return RedirectToAction("Login");
+            }
+            Session["Failure"] = null;
             Tasks tasks = (Tasks)Session["Tasks"];
             tasks.Add(task);
             return RedirectToAction("TaskList");
         }
 
+        public ActionResult CompleteTask()
+        {
+            if (Session["User"] == null)
+            {
+                Session["RegSuccess"] = null;
+                Session["Failure"] = "You have been logged out due to being idle";
+                return RedirectToAction("Login");
+            }
+            Session["Failure"] = null;
+            return View();
+        }
+
         [HttpPost]
         public ActionResult CompleteTask(Task task)
         {
+            if (Session["User"] == null)
+            {
+                Session["RegSuccess"] = null;
+                Session["Failure"] = "You have been logged out due to being idle";
+                return RedirectToAction("Login");
+            }
+            Session["Failure"] = null;
+            if (Session["User"] == null)
+            {
+                Session["RegSuccess"] = null;
+                Session["Failure"] = "You have been logged out due to being idle";
+                return RedirectToAction("Login");
+            }
+            Session["Failure"] = null;
             Tasks tasks = (Tasks)Session["Tasks"];
             tasks.CompleteToggler(task.Id);
             return RedirectToAction("TaskList");
         }
 
+        public ActionResult DeleteTask()
+        {
+            if (Session["User"] == null)
+            {
+                Session["RegSuccess"] = null;
+                Session["Failure"] = "You have been logged out due to being idle";
+                return RedirectToAction("Login");
+            }
+            Session["Failure"] = null;
+            return View();
+        }
+
         [HttpPost]
         public ActionResult DeleteTask(Task task)
         {
+            if (Session["User"] == null)
+            {
+                Session["RegSuccess"] = null;
+                Session["Failure"] = "You have been logged out due to being idle";
+                return RedirectToAction("Login");
+            }
+            Session["Failure"] = null;
             Tasks tasks = (Tasks)Session["Tasks"];
             tasks.Delete(task.Id);
             return RedirectToAction("TaskList");
@@ -147,7 +213,7 @@ namespace Task_List_2.Controllers
         public ActionResult Logout()
         {
             Session["User"] = null;
-            return RedirectToAction("Index");
+            return RedirectToAction("AddTask");
         }
     }
 }

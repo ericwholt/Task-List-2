@@ -204,6 +204,8 @@
     <Content Include="Views\Home\Registration.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\AddTask.cshtml" />
+    <Content Include="Views\Home\DeleteTask.cshtml" />
+    <Content Include="Views\Home\CompleteTask.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

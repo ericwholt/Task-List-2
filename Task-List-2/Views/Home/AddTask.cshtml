@@ -21,7 +21,7 @@
     </div>
     <div class="form-group row">
         <div class="col-sm-3">
-            <textarea class="form-control" name="Description" id="Description" rows="3" maxlength="250"></textarea>
+            <textarea class="form-control" name="Description" id="Description" rows="3" maxlength="250" required></textarea>
         </div>
         <div class="col-sm-3">
             <input type="date" name="DueDate" class="form-control mr-sm-2" id="DueDate" min="1000-01-01" max="3000-12-31" required />
@@ -31,14 +31,18 @@
         </div>
     </div>
     <div class="form-group">
-        
+
     </div>
     @*<div class="form-check mr-sm-2">
             <input type="text" name="Completed" class="form-check-input" id="Completed" value="false" />
             <input type="hidden" name="Completed" class="form-check-input" value="false" />
             <label class="form-check-label" for="Completed">Completed</label>
         </div>*@
-    
+
     <input type="hidden" name="UserId" class="form-check-input" value="@user.Id" />
     <input class="btn btn-primary" type="submit" value="Submit">
 </form>
+<script>
+    document.getElementById("Description").focus();
+
+</script>  
